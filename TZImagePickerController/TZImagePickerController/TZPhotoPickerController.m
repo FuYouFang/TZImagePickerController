@@ -17,6 +17,7 @@
 #import "TZGifPhotoPreviewController.h"
 #import "TZLocationManager.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "UIColor+hexColor.h"
 
 @interface TZPhotoPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate> {
     NSMutableArray *_models;
@@ -190,8 +191,7 @@ static CGFloat itemMargin = 5;
     if (!tzImagePickerVc.showSelectBtn) return;
 
     _bottomToolBar = [[UIView alloc] initWithFrame:CGRectZero];
-    CGFloat rgb = 253 / 255.0;
-    _bottomToolBar.backgroundColor = [UIColor colorWithRed:rgb green:rgb blue:rgb alpha:1.0];
+    _bottomToolBar.backgroundColor = [UIColor whiteColor];
 
     _previewButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_previewButton addTarget:self action:@selector(previewButtonClick) forControlEvents:UIControlEventTouchUpInside];
@@ -226,13 +226,23 @@ static CGFloat itemMargin = 5;
     }
     
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _doneButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    _doneButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    _doneButton.layer.cornerRadius = 2;
+    _doneButton.layer.masksToBounds = YES;
     [_doneButton addTarget:self action:@selector(doneButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [_doneButton setTitle:tzImagePickerVc.doneBtnTitleStr forState:UIControlStateNormal];
     [_doneButton setTitle:tzImagePickerVc.doneBtnTitleStr forState:UIControlStateDisabled];
     [_doneButton setTitleColor:tzImagePickerVc.oKButtonTitleColorNormal forState:UIControlStateNormal];
     [_doneButton setTitleColor:tzImagePickerVc.oKButtonTitleColorDisabled forState:UIControlStateDisabled];
-    _doneButton.enabled = tzImagePickerVc.selectedModels.count || tzImagePickerVc.alwaysEnableDoneBtn;
+    if (tzImagePickerVc.selectedModels.count || tzImagePickerVc.alwaysEnableDoneBtn) {
+        _doneButton.enabled = YES;
+        [_doneButton setBackgroundColor:tzImagePickerVc.oKButtonBackgroundColorNormal];
+        [_doneButton setTitle:[NSString stringWithFormat:@"完成(%zd)", tzImagePickerVc.selectedModels.count] forState:UIControlStateNormal];
+    } else {
+        _doneButton.enabled = NO;
+        [_doneButton setBackgroundColor:tzImagePickerVc.oKButtonBackgroundColorDisabled];
+        [_doneButton setTitle:tzImagePickerVc.doneBtnTitleStr forState:UIControlStateNormal];
+    }
     
     _numberImageView = [[UIImageView alloc] initWithImage:tzImagePickerVc.photoNumberIconImage];
     _numberImageView.hidden = tzImagePickerVc.selectedModels.count <= 0;
@@ -249,8 +259,7 @@ static CGFloat itemMargin = 5;
     _numberLabel.backgroundColor = [UIColor clearColor];
     
     _divideLine = [[UIView alloc] init];
-    CGFloat rgb2 = 222 / 255.0;
-    _divideLine.backgroundColor = [UIColor colorWithRed:rgb2 green:rgb2 blue:rgb2 alpha:1.0];
+    _divideLine.backgroundColor = [UIColor hexColor:@"DEDEDE"];
     
     [_bottomToolBar addSubview:_divideLine];
     [_bottomToolBar addSubview:_previewButton];
@@ -316,8 +325,9 @@ static CGFloat itemMargin = 5;
         _originalPhotoButton.frame = CGRectMake(CGRectGetMaxX(_previewButton.frame), 0, fullImageWidth + 56, 50);
         _originalPhotoLabel.frame = CGRectMake(fullImageWidth + 46, 0, 80, 50);
     }
-    [_doneButton sizeToFit];
-    _doneButton.frame = CGRectMake(self.view.tz_width - _doneButton.tz_width - 12, 0, _doneButton.tz_width, 50);
+//    [_doneButton sizeToFit];
+//    _doneButton.frame = CGRectMake(self.view.tz_width - _doneButton.tz_width - 12, 0, _doneButton.tz_width, 50);
+    _doneButton.frame = CGRectMake(self.view.tz_width - 88, 8, 72, 30);
     _numberImageView.frame = CGRectMake(_doneButton.tz_left - 24 - 5, 13, 24, 24);
     _numberLabel.frame = _numberImageView.frame;
     _divideLine.frame = CGRectMake(0, 0, self.view.tz_width, 1);
@@ -495,7 +505,12 @@ static CGFloat itemMargin = 5;
     cell.model = model;
     if (model.isSelected && tzImagePickerVc.showSelectedIndex) {
         NSString *assetId = [[TZImageManager manager] getAssetIdentifier:model.asset];
-        cell.index = [tzImagePickerVc.selectedAssetIds indexOfObject:assetId] + 1;
+        if ([tzImagePickerVc.selectedAssetIds indexOfObject:assetId] == NSNotFound) {
+            cell.index = 1;
+        } else {
+            cell.index = [tzImagePickerVc.selectedAssetIds indexOfObject:assetId] + 1;
+        }
+        
     }
     cell.showSelectBtn = tzImagePickerVc.showSelectBtn;
     cell.allowPreview = tzImagePickerVc.allowPreview;
@@ -685,7 +700,17 @@ static CGFloat itemMargin = 5;
     TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
     
     _previewButton.enabled = tzImagePickerVc.selectedModels.count > 0;
-    _doneButton.enabled = tzImagePickerVc.selectedModels.count > 0 || tzImagePickerVc.alwaysEnableDoneBtn;
+    
+    if (tzImagePickerVc.selectedModels.count > 0 || tzImagePickerVc.alwaysEnableDoneBtn) {
+        _doneButton.enabled = YES;
+        [_doneButton setBackgroundColor:tzImagePickerVc.oKButtonBackgroundColorNormal];
+        [_doneButton setTitle:[NSString stringWithFormat:@"完成(%zd)",tzImagePickerVc.selectedModels.count] forState:UIControlStateNormal];
+    } else {
+        _doneButton.enabled = NO;
+        [_doneButton setBackgroundColor:tzImagePickerVc.oKButtonBackgroundColorDisabled];
+        [_doneButton setTitle:tzImagePickerVc.doneBtnTitleStr forState:UIControlStateNormal];
+    }
+    
     
     _numberImageView.hidden = tzImagePickerVc.selectedModels.count <= 0;
     _numberLabel.hidden = tzImagePickerVc.selectedModels.count <= 0;

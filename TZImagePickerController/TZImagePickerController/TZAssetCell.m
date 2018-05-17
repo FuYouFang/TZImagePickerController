@@ -379,7 +379,6 @@
         UIButton *selectedCountButton = [[UIButton alloc] init];
         selectedCountButton.layer.cornerRadius = 12;
         selectedCountButton.clipsToBounds = YES;
-        selectedCountButton.backgroundColor = [UIColor redColor];
         [selectedCountButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         selectedCountButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [self.contentView addSubview:selectedCountButton];

@@ -18,6 +18,8 @@
 #import "TZPhotoPreviewController.h"
 #import "TZGifPhotoPreviewController.h"
 #import "TZLocationManager.h"
+#import "GCHImagePickerController.h"
+
 
 @interface ViewController ()<TZImagePickerControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,UINavigationControllerDelegate> {
     NSMutableArray *_selectedPhotos;
@@ -223,6 +225,12 @@
 #pragma mark - TZImagePickerController
 
 - (void)pushTZImagePickerController {
+    
+//    GCHImagePickerController *controller = [[GCHImagePickerController alloc] initWithMaxImagesCount:2 columnNumber:self.columnNumberTF.text.integerValue delegate:self pushPhotoPickerVc:YES];
+//
+//    [self presentViewController:controller animated:YES completion:nil];
+
+//    return;
     if (self.maxCountTF.text.integerValue <= 0) {
         return;
     }

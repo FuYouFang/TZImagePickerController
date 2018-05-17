@@ -66,6 +66,8 @@
 		9F763A771FA0741D00D9E526 /* TZImageCropManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DC84D081DF5358500A107A9 /* TZImageCropManager.h */; };
 		9F763A781FA0741D00D9E526 /* TZLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 902938D61EE2D02C000F2F8F /* TZLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9F763A791FA0741D00D9E526 /* UIView+Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 90EBF5D41C2E298000CB9BCC /* UIView+Layout.h */; };
+		C5E7FB1820AC40E000E89A07 /* GCHImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5E7FB1720AC40E000E89A07 /* GCHImagePickerController.m */; };
+		C5E7FB5020AD6D5E00E89A07 /* UIColor+hexColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C5E7FB4E20AD6D5E00E89A07 /* UIColor+hexColor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +165,10 @@
 		90EBF5D51C2E298000CB9BCC /* UIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Layout.m"; sourceTree = "<group>"; };
 		9F763A421FA071CF00D9E526 /* TZImagePickerController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TZImagePickerController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F763A451FA071D000D9E526 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C5E7FB1620AC40E000E89A07 /* GCHImagePickerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCHImagePickerController.h; sourceTree = "<group>"; };
+		C5E7FB1720AC40E000E89A07 /* GCHImagePickerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCHImagePickerController.m; sourceTree = "<group>"; };
+		C5E7FB4E20AD6D5E00E89A07 /* UIColor+hexColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+hexColor.m"; sourceTree = "<group>"; };
+		C5E7FB4F20AD6D5E00E89A07 /* UIColor+hexColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+hexColor.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,7 +253,11 @@
 				900E658B1C2BB8D5003D9A9E /* Assets.xcassets */,
 				900E658D1C2BB8D5003D9A9E /* LaunchScreen.storyboard */,
 				900E65901C2BB8D5003D9A9E /* Info.plist */,
+				C5E7FB4F20AD6D5E00E89A07 /* UIColor+hexColor.h */,
+				C5E7FB4E20AD6D5E00E89A07 /* UIColor+hexColor.m */,
 				900E657F1C2BB8D5003D9A9E /* Supporting Files */,
+				C5E7FB1620AC40E000E89A07 /* GCHImagePickerController.h */,
+				C5E7FB1720AC40E000E89A07 /* GCHImagePickerController.m */,
 			);
 			path = TZImagePickerController;
 			sourceTree = "<group>";
@@ -538,8 +548,10 @@
 				900EF00F1C2C0B1100EA709B /* TZAssetModel.m in Sources */,
 				900EEFFE1C2BD58B00EA709B /* TZPhotoPickerController.m in Sources */,
 				90EBF5D61C2E298000CB9BCC /* UIView+Layout.m in Sources */,
+				C5E7FB1820AC40E000E89A07 /* GCHImagePickerController.m in Sources */,
 				90CE84B71C3BABB6003D0779 /* TZVideoPlayerController.m in Sources */,
 				900EF0021C2BD7E400EA709B /* TZAssetCell.m in Sources */,
+				C5E7FB5020AD6D5E00E89A07 /* UIColor+hexColor.m in Sources */,
 				6DD0502B1DF659ED0057C78D /* TZProgressView.m in Sources */,
 				6D32B9BD1CD83640005CE1E0 /* LxGridViewFlowLayout.m in Sources */,
 				6D4608311DFFC60D004FB009 /* TZGifPhotoPreviewController.m in Sources */,

@@ -49,10 +49,9 @@
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.needShowStatusBar = ![UIApplication sharedApplication].statusBarHidden;
+    
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationBar.barStyle = UIBarStyleBlack;
-    self.navigationBar.translucent = YES;
+    
     [TZImageManager manager].shouldFixOrientation = NO;
 
     // Default appearance, you can reset these after this method
@@ -61,8 +60,10 @@
     self.oKButtonTitleColorDisabled = [UIColor colorWithRed:(83/255.0) green:(179/255.0) blue:(17/255.0) alpha:0.5];
     
     if (iOS7Later) {
-        self.navigationBar.barTintColor = [UIColor colorWithRed:(34/255.0) green:(34/255.0)  blue:(34/255.0) alpha:1.0];
-        self.navigationBar.tintColor = [UIColor whiteColor];
+        self.navigationBar.translucent = YES;
+//        self.navigationBar.barStyle = UIBarStyleBlack;
+//        self.navigationBar.barTintColor = [UIColor colorWithRed:(34/255.0) green:(34/255.0)  blue:(34/255.0) alpha:1.0];
+//        self.navigationBar.tintColor = [UIColor whiteColor];
         self.automaticallyAdjustsScrollViewInsets = NO;
         if (self.needShowStatusBar) [UIApplication sharedApplication].statusBarHidden = NO;
     }
@@ -266,19 +267,30 @@
     self.timeout = 15;
     self.photoWidth = 828.0;
     self.photoPreviewMaxWidth = 600;
-    self.naviTitleColor = [UIColor whiteColor];
-    self.naviTitleFont = [UIFont systemFontOfSize:17];
-    self.barItemTextFont = [UIFont systemFontOfSize:15];
-    self.barItemTextColor = [UIColor whiteColor];
+    
+    BOOL isUseDefault = NO;
+    if (isUseDefault) {
+        self.naviTitleColor = [UIColor whiteColor];
+        self.naviTitleFont = [UIFont systemFontOfSize:17];
+        self.barItemTextFont = [UIFont systemFontOfSize:15];
+        self.barItemTextColor = [UIColor whiteColor];
+    }
     self.allowPreview = YES;
     self.statusBarStyle = UIStatusBarStyleLightContent;
     self.cannotSelectLayerColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
     
-    self.iconThemeColor = [UIColor colorWithRed:31 / 255.0 green:185 / 255.0 blue:34 / 255.0 alpha:1.0];
     [self configDefaultBtnTitle];
+    [self configDefaultImageName];
     
     CGFloat cropViewWH = MIN(self.view.tz_width, self.view.tz_height) / 3 * 2;
     self.cropRect = CGRectMake((self.view.tz_width - cropViewWH) / 2, (self.view.tz_height - cropViewWH) / 2, cropViewWH, cropViewWH);
+}
+
+- (UIColor *)iconThemeColor {
+    if (_iconThemeColor == nil) {
+        _iconThemeColor = [UIColor colorWithRed:31 / 255.0 green:185 / 255.0 blue:34 / 255.0 alpha:1.0];
+    }
+    return _iconThemeColor;
 }
 
 - (void)configDefaultImageName {
@@ -326,10 +338,6 @@
     _photoOriginSelImage = [UIImage imageNamedFromMyBundle:photoOriginSelImageName];
 }
 
-- (void)setIconThemeColor:(UIColor *)iconThemeColor {
-    _iconThemeColor = iconThemeColor;
-    [self configDefaultImageName];
-}
 
 - (void)configDefaultBtnTitle {
     self.doneBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Done"];
@@ -546,10 +554,23 @@
     [TZImageManager manager].photoWidth = photoWidth;
 }
 
+- (NSMutableArray *)selectedAssetIds{
+    if (_selectedAssetIds == nil) {
+        _selectedAssetIds = [NSMutableArray array];
+    }
+    return _selectedAssetIds;
+}
+
+- (NSMutableArray<TZAssetModel *> *)selectedModels {
+    if (_selectedModels == nil) {
+        _selectedModels = [NSMutableArray array];
+    }
+    return _selectedModels;
+}
+
 - (void)setSelectedAssets:(NSMutableArray *)selectedAssets {
     _selectedAssets = selectedAssets;
-    _selectedModels = [NSMutableArray array];
-    _selectedAssetIds = [NSMutableArray array];
+    
     for (id asset in selectedAssets) {
         TZAssetModel *model = [TZAssetModel modelWithAsset:asset type:[[TZImageManager manager] getAssetType:asset]];
         model.isSelected = YES;
@@ -608,13 +629,13 @@
 - (void)addSelectedModel:(TZAssetModel *)model {
     [_selectedModels addObject:model];
     NSString *assetId = [[TZImageManager manager] getAssetIdentifier:model.asset];
-    [_selectedAssetIds addObject:assetId];
+    [self.selectedAssetIds addObject:assetId];
 }
 
 - (void)removeSelectedModel:(TZAssetModel *)model {
     [_selectedModels removeObject:model];
     NSString *assetId = [[TZImageManager manager] getAssetIdentifier:model.asset];
-    [_selectedAssetIds removeObject:assetId];
+    [self.selectedAssetIds removeObject:assetId];
 }
 
 - (UIImage *)createImageWithColor:(UIColor *)color size:(CGSize)size radius:(CGFloat)radius {
@@ -703,6 +724,14 @@
 
 @implementation TZAlbumPickerController
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@" 返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.isFirstAppear = YES;
@@ -720,10 +749,6 @@
         self.navigationItem.title = [NSBundle tz_localizedStringForKey:@"Photos"];
     } else if (imagePickerVc.allowPickingVideo) {
         self.navigationItem.title = [NSBundle tz_localizedStringForKey:@"Videos"];
-    }
-    
-    if (self.isFirstAppear && !imagePickerVc.navLeftBarButtonSettingBlock) {
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSBundle tz_localizedStringForKey:@"Back"] style:UIBarButtonItemStylePlain target:nil action:nil];
     }
     
     [self configTableView];
